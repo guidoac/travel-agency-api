@@ -15,6 +15,7 @@ import {
 } from 'typeorm';
 import { Country } from '../countries/country.entity';
 import { User } from '../users/user.entity';
+import { TourImage } from './tour-image.entity';
 
 @Entity('tours')
 export class Tour {
@@ -40,6 +41,10 @@ export class Tour {
   @JoinColumn()
   @Exclude()
   user: User;
+
+  @OneToMany((type) => TourImage, (image) => image.tour)
+  @JoinColumn()
+  images: TourImage[];
 
   @CreateDateColumn()
   created_at: string;
