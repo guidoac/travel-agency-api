@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Tour } from '../tours/tour.entity';
 
 @Entity('countries')
 export class Country {
@@ -13,4 +14,9 @@ export class Country {
 
   @Column({ nullable: true })
   code: string;
+
+  @OneToMany((type) => Tour, (tour) => tour.country, {
+    eager: false,
+  })
+  tours: Tour[];
 }
