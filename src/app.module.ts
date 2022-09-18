@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from './app/users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ToursModule } from './app/tours/tours.module';
 import { CountriesModule } from './app/countries/countries.module';
+import { MulterModule } from '@nestjs/platform-express';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,10 +23,14 @@ import { CountriesModule } from './app/countries/countries.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    MulterModule.register({
+      dest: './upload',
+    }),
     UsersModule,
     AuthModule,
     ToursModule,
     CountriesModule,
   ],
+  exports: [MulterModule],
 })
 export class AppModule {}

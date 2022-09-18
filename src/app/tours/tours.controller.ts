@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UploadedFile,
   UseGuards,
@@ -10,7 +11,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/utils/decorators/get-user.decorator';
+import { ImageFileType } from 'src/utils/types/files';
 import { User } from '../users/user.entity';
+import { CreateTourImageDto } from './dto/create-tour-image.dto';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { Tour } from './tour.entity';
@@ -29,5 +32,15 @@ export class ToursController {
   @Post()
   createTour(@Body() createTourDto: CreateTourDto, @GetUser() user: User) {
     return this.toursService.createTour(createTourDto, user);
+  }
+
+  @Post('/:id/image')
+  @UseInterceptors(FileInterceptor('file'))
+  createTourImage(
+    @UploadedFile() file: ImageFileType,
+    @Body() createTourImageDto: CreateTourImageDto,
+    @Param('id') id: string,
+  ) {
+    console.log(file);
   }
 }
