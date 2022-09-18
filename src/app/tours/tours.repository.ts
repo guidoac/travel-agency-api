@@ -22,6 +22,16 @@ export class ToursRepository extends Repository<Tour> {
     return result;
   }
 
+  async findTourById(id: string): Promise<Tour> {
+    const found = await this.findOneBy({ id });
+
+    if (!found) {
+      throw new NotFoundException(`Tour com id: ${id} não encontrado`);
+    }
+
+    return found;
+  }
+
   async createTour(createTourDto: CreateTourDto, user: User): Promise<Tour> {
     const { name, description, country } = createTourDto;
 
