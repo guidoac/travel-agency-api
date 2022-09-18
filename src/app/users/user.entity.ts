@@ -4,9 +4,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Tour } from '../tours/tour.entity';
 
 @Entity('users')
 export class User {
@@ -22,6 +25,11 @@ export class User {
   @Exclude({ toPlainOnly: true })
   @Column()
   password: string;
+
+  @OneToMany((type) => Tour, (tour) => tour.user, {
+    eager: true,
+  })
+  tours: Tour[];
 
   @CreateDateColumn()
   created_at: Date;
