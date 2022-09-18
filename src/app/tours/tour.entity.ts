@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -13,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Country } from '../countries/country.entity';
+import { User } from '../users/user.entity';
 
 @Entity('tours')
 export class Tour {
@@ -31,6 +33,13 @@ export class Tour {
   })
   @JoinColumn()
   country: Country;
+
+  @ManyToOne((type) => User, (user) => user.id, {
+    eager: false,
+  })
+  @JoinColumn()
+  @Exclude()
+  user: User;
 
   @CreateDateColumn()
   created_at: string;

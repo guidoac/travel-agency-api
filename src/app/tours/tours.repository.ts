@@ -2,7 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CountriesService } from '../countries/countries.service';
 import { Country } from '../countries/country.entity';
+import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
+import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { Tour } from './tour.entity';
 
 @Injectable()
@@ -14,7 +16,13 @@ export class ToursRepository extends Repository<Tour> {
     super(Tour, dataSource.createEntityManager());
   }
 
-  async createTour(createTourDto: CreateTourDto): Promise<Tour> {
+  async findTours(getToursFilterDto: GetToursFilterDto): Promise<Tour[]> {
+    const result = await this.find();
+
+    return result;
+  }
+
+  async createTour(createTourDto: CreateTourDto, user: User): Promise<Tour> {
     const { name, description, country } = createTourDto;
 
     const countryFound = await this.countriesService.findCountry(country);
@@ -29,9 +37,9 @@ export class ToursRepository extends Repository<Tour> {
       name,
       description,
       country: countryFound,
+      user,
     });
 
-    console.log('tour', tour);
     try {
       await this.save(tour);
 
