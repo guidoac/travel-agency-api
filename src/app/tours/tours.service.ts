@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ImageFileType } from 'src/utils/types/files';
 import { CountriesService } from '../countries/countries.service';
 import { ImagesService } from '../images/images.service';
@@ -17,24 +16,27 @@ export class ToursService {
     private imagesService: ImagesService,
   ) {}
 
-  async findTours(getToursFilterDto: GetToursFilterDto): Promise<Tour[]> {
-    return await this.toursRepository.findTours(getToursFilterDto);
+  async findTours(
+    getToursFilterDto: GetToursFilterDto,
+    user: User,
+  ): Promise<Tour[]> {
+    return await this.toursRepository.findTours(getToursFilterDto, user);
   }
 
-  async findTourById(id: string): Promise<Tour> {
-    return await this.toursRepository.findTourById(id);
+  async findTourById(id: string, user: User): Promise<Tour> {
+    return await this.toursRepository.findTourById(id, user);
   }
 
   async createTour(createTourDto: CreateTourDto, user: User): Promise<Tour> {
     return await this.toursRepository.createTour(createTourDto, user);
   }
 
-  async createTourImage(id: string, file: ImageFileType) {
-    const tourFound = await this.toursRepository.findTourById(id);
+  async createTourImage(tourId: string, file: ImageFileType, user: User) {
+    const tourFound = await this.toursRepository.findTourById(tourId, user);
     const image = await this.imagesService.createImage(file.filename);
 
     if (tourFound) {
-      this.toursRepository.createTourImage(id, image);
+      this.toursRepository.createTourImage(tourId, image, user);
     }
   }
 }

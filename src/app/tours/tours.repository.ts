@@ -17,17 +17,42 @@ export class ToursRepository extends Repository<Tour> {
     super(Tour, dataSource.createEntityManager());
   }
 
-  async findTours(getToursFilterDto: GetToursFilterDto): Promise<Tour[]> {
-    const result = await this.find();
+  async findTours(
+    getToursFilterDto: GetToursFilterDto,
+    user: User,
+  ): Promise<Tour[]> {
+    const { search } = getToursFilterDto;
+    const query = this.createQueryBuilder('tours');
 
+    query.where({ user });
+
+    if (search) {
+      query.andWhere(
+        'LOWER(tours.name) LIKE %:search% OR LOWER(tours.description) LIKE %:search%',
+      );
+    }
+
+    const result = await query.getMany();
+
+    if (!result) {
+      throw new NotFoundException(
+        `Não foi encontrado nenhum tour para o usuário ${user.username} com o filtro: ${search}`,
+      );
+    }
     return result;
   }
 
-  async findTourById(id: string): Promise<Tour> {
-    const found = await this.findOneBy({ id });
+  async findTourById(id: string, user: User): Promise<Tour> {
+    const query = this.createQueryBuilder('tours');
+
+    query.andWhere({ user, id });
+
+    const found = await query.getOne();
 
     if (!found) {
-      throw new NotFoundException(`Tour com id: ${id} não encontrado`);
+      throw new NotFoundException(
+        `Tour com id: ${id} do usuário: ${user.username} não encontrado`,
+      );
     }
 
     return found;
@@ -60,8 +85,8 @@ export class ToursRepository extends Repository<Tour> {
     }
   }
 
-  async createTourImage(tourId: string, img: Image) {
-    const tourFound = await this.findTourById(tourId);
+  async createTourImage(tourId: string, img: Image, user: User) {
+    const tourFound = await this.findTourById(tourId, user);
 
     tourFound.images = [img];
 

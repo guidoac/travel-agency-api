@@ -15,7 +15,6 @@ import { ImageFileType } from 'src/utils/types/files';
 import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
-import { Tour } from './tour.entity';
 import { ToursService } from './tours.service';
 
 @UseGuards(AuthGuard('jwt'))
@@ -24,8 +23,11 @@ export class ToursController {
   constructor(private toursService: ToursService) {}
 
   @Get()
-  findTours(@Body() getToursFilterDto: GetToursFilterDto) {
-    return this.toursService.findTours(getToursFilterDto);
+  findTours(
+    @Body() getToursFilterDto: GetToursFilterDto,
+    @GetUser() user: User,
+  ) {
+    return this.toursService.findTours(getToursFilterDto, user);
   }
 
   @Post()
@@ -38,7 +40,8 @@ export class ToursController {
   createTourImage(
     @UploadedFile() file: ImageFileType,
     @Param('id') id: string,
+    @GetUser() user: User,
   ) {
-    return this.toursService.createTourImage(id, file);
+    return this.toursService.createTourImage(id, file, user);
   }
 }
