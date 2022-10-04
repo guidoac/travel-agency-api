@@ -1,21 +1,10 @@
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinTable,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity } from 'src/utils/database/base-entity.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Tour } from '../tours/tour.entity';
 
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   username: string;
 
@@ -30,13 +19,4 @@ export class User {
     eager: true,
   })
   tours: Tour[];
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-
-  @DeleteDateColumn()
-  deleted_at: Date;
 }

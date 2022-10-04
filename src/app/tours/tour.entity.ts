@@ -1,27 +1,19 @@
 import { Exclude } from 'class-transformer';
+import { BaseEntity } from 'src/utils/database/base-entity.entity';
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Country } from '../countries/country.entity';
+import { Image } from '../images/image.entity';
 import { User } from '../users/user.entity';
-import { TourImage } from './tour-image.entity';
 
 @Entity('tours')
-export class Tour {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Tour extends BaseEntity {
   @Column()
   name: string;
 
@@ -41,17 +33,4 @@ export class Tour {
   @JoinColumn()
   @Exclude()
   user: User;
-
-  @OneToMany((type) => TourImage, (image) => image.tour)
-  @JoinColumn()
-  images: TourImage[];
-
-  @CreateDateColumn()
-  created_at: string;
-
-  @DeleteDateColumn()
-  deleted_at: string;
-
-  @UpdateDateColumn()
-  updated_at: string;
 }
