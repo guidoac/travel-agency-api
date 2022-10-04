@@ -22,13 +22,13 @@ export class ToursRepository extends Repository<Tour> {
     user: User,
   ): Promise<Tour[]> {
     const { search } = getToursFilterDto;
-    const query = this.createQueryBuilder('tours');
+    const query = this.createQueryBuilder('tour');
 
     query.where({ user });
 
     if (search) {
       query.andWhere(
-        'LOWER(tours.name) LIKE %:search% OR LOWER(tours.description) LIKE %:search%',
+        'LOWER(tour.name) LIKE %:search% OR LOWER(tour.description) LIKE %:search%',
       );
     }
 
