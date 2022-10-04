@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/utils/database/base-entity.entity';
 import {
@@ -20,16 +21,14 @@ export class Tour extends BaseEntity {
   @Column()
   description: string;
 
-  @ManyToOne((type) => Country, (country) => country.code, {
+  @ManyToOne((_type) => Country, (country) => country.code, {
     eager: true,
     cascade: true,
   })
   @JoinColumn()
   country: Country;
 
-  @ManyToOne((type) => User, (user) => user.id, {
-    eager: false,
-  })
+  @ManyToOne((_type) => User, (user) => user.id, {})
   @JoinColumn()
   @Exclude()
   user: User;
