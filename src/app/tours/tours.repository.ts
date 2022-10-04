@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CountriesService } from '../countries/countries.service';
 import { Country } from '../countries/country.entity';
@@ -10,6 +10,8 @@ import { Tour } from './tour.entity';
 
 @Injectable()
 export class ToursRepository extends Repository<Tour> {
+  private logger = new Logger('ToursRepository', { timestamp: true });
+
   constructor(
     private dataSource: DataSource,
     private countriesService: CountriesService,
@@ -35,9 +37,10 @@ export class ToursRepository extends Repository<Tour> {
     const result = await query.getMany();
 
     if (!result) {
-      throw new NotFoundException(
-        `Não foi encontrado nenhum tour para o usuário ${user.username} com o filtro: ${search}`,
-      );
+      const msg = `Não foi encontrado nenhum tour para o usuário ${user.username} com o filtro: ${search}`;
+
+      this.logger.log(msg);
+      throw new NotFoundException(msg);
     }
     return result;
   }
@@ -50,9 +53,10 @@ export class ToursRepository extends Repository<Tour> {
     const found = await query.getOne();
 
     if (!found) {
-      throw new NotFoundException(
-        `Tour com id: ${id} do usuário: ${user.username} não encontrado`,
-      );
+      const msg = `Tour com id: ${id} do usuário: ${user.username} não encontrado`;
+
+      this.logger.log(msg);
+      throw new NotFoundException(msg);
     }
 
     return found;
@@ -64,9 +68,10 @@ export class ToursRepository extends Repository<Tour> {
     const countryFound = await this.countriesService.findCountry(country);
 
     if (!countryFound) {
-      throw new NotFoundException(
-        `Country with code ${country} not found, please create this country and try again.`,
-      );
+      const msg = `Country with code ${country} not found, please create this country and try again.`;
+
+      this.logger.log(msg);
+      throw new NotFoundException(msg);
     }
 
     const tour = this.create({
@@ -77,6 +82,9 @@ export class ToursRepository extends Repository<Tour> {
     });
 
     try {
+      const msg = `User with id ${user.id} created tour: ${tour.name}`;
+
+      this.logger.log(msg);
       await this.save(tour);
 
       return tour;
@@ -92,6 +100,9 @@ export class ToursRepository extends Repository<Tour> {
 
     try {
       await this.save(tourFound);
+      this.logger.log(
+        `User with id ${user.id} created tour images: ${img.file_name} for tour ${tourId}`,
+      );
 
       return tourFound;
     } catch (err) {

@@ -17,10 +17,4 @@ export class AuthController {
   async signIn(@Body() authCredentialsDto: AuthCredentialsDto) {
     return this.authService.signIn(authCredentialsDto);
   }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('teste')
-  async teste() {
-    console.log('passou no jwt');
-  }
 }

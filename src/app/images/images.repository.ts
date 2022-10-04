@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
@@ -8,6 +9,8 @@ import { Image } from './image.entity';
 
 @Injectable()
 export class ImagesRepository extends Repository<Image> {
+  private logger = new Logger('ImagesRepository');
+
   constructor(private dataSource: DataSource) {
     super(Image, dataSource.createEntityManager());
   }
@@ -16,7 +19,10 @@ export class ImagesRepository extends Repository<Image> {
     const found = await this.findOne({ where: { id } });
 
     if (!found) {
-      throw new NotFoundException(`Image with id: ${id} not found!`);
+      const msg = `Image with id: ${id} not found!`;
+
+      this.logger.log(msg);
+      throw new NotFoundException(msg);
     }
 
     return found;
@@ -32,6 +38,7 @@ export class ImagesRepository extends Repository<Image> {
 
       return image;
     } catch (err) {
+      this.logger.log(`Internal error trying to create the image ${name}`);
       throw new InternalServerErrorException();
     }
   }

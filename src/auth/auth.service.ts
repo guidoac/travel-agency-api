@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,6 +13,8 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Injectable()
 export class AuthService {
+  private logger = new Logger('AuthService');
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -26,6 +29,7 @@ export class AuthService {
     const user = await this.validateUser(username, password);
 
     if (!user) {
+      this.logger.log(`User with username ${username} is invalid`);
       throw new UnauthorizedException();
     }
 
