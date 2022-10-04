@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CountriesService } from '../countries/countries.service';
 import { Country } from '../countries/country.entity';
+import { Image } from '../images/image.entity';
 import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
@@ -54,6 +55,20 @@ export class ToursRepository extends Repository<Tour> {
       await this.save(tour);
 
       return tour;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async createTourImage(tourId: string, img: Image) {
+    const tourFound = await this.findTourById(tourId);
+
+    tourFound.images = [img];
+
+    try {
+      await this.save(tourFound);
+
+      return tourFound;
     } catch (err) {
       throw err;
     }

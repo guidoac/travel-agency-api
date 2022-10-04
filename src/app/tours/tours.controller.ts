@@ -13,7 +13,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/utils/decorators/get-user.decorator';
 import { ImageFileType } from 'src/utils/types/files';
 import { User } from '../users/user.entity';
-import { CreateTourImageDto } from './dto/create-tour-image.dto';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { Tour } from './tour.entity';
@@ -38,9 +37,8 @@ export class ToursController {
   @UseInterceptors(FileInterceptor('file'))
   createTourImage(
     @UploadedFile() file: ImageFileType,
-    @Body() createTourImageDto: CreateTourImageDto,
     @Param('id') id: string,
   ) {
-    console.log(file);
+    return this.toursService.createTourImage(id, file);
   }
 }

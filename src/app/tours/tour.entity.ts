@@ -33,4 +33,21 @@ export class Tour extends BaseEntity {
   @JoinColumn()
   @Exclude()
   user: User;
+
+  @ManyToMany(() => Image, (img) => img.tours, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'tour_images',
+    joinColumn: {
+      name: 'tour',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'image',
+      referencedColumnName: 'id',
+    },
+  })
+  images: Image[];
 }

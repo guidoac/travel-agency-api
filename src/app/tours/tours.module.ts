@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tour } from './tour.entity';
 import { ToursRepository } from './tours.repository';
 import { CountriesModule } from '../countries/countries.module';
-import { TourImage } from './tour-image.entity';
-import { TourImageRepository } from './tour-image.repository';
+import { ImagesModule } from '../images/images.module';
+import { ImagesService } from '../images/images.service';
+import { ImagesRepository } from '../images/images.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tour, TourImage]), CountriesModule],
-  providers: [ToursService, ToursRepository, TourImageRepository],
+  imports: [TypeOrmModule.forFeature([Tour]), ImagesModule, CountriesModule],
+  providers: [ToursService, ToursRepository, ImagesService, ImagesRepository],
   controllers: [ToursController],
 })
 export class ToursModule {}
