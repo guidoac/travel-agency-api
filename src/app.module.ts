@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ToursModule } from './app/tours/tours.module';
 import { CountriesModule } from './app/countries/countries.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { ImagesModule } from './app/images/images.module';
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { MulterModule } from '@nestjs/platform-express';
     AuthModule,
     ToursModule,
     CountriesModule,
+    ImagesModule,
   ],
   exports: [MulterModule],
 })
