@@ -7,6 +7,10 @@ import { ToursModule } from './app/tours/tours.module';
 import { CountriesModule } from './app/countries/countries.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImagesModule } from './app/images/images.module';
+import { CompaniesModule } from './app/companies/companies.module';
+import { AddressModule } from './app/address/address.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Global()
 @Module({
@@ -25,13 +29,18 @@ import { ImagesModule } from './app/images/images.module';
       autoLoadEntities: true,
     }),
     MulterModule.register({
-      dest: './upload',
+      dest: `./${process.env.STATIC_DEFAULT_PATH}`,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', process.env.STATIC_DEFAULT_PATH),
     }),
     UsersModule,
     AuthModule,
     ToursModule,
     CountriesModule,
     ImagesModule,
+    CompaniesModule,
+    AddressModule,
   ],
   exports: [MulterModule],
 })
