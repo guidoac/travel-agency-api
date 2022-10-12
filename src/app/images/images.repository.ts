@@ -28,9 +28,9 @@ export class ImagesRepository extends Repository<Image> {
     return found;
   }
 
-  async createImage(name: string): Promise<Image> {
+  async createImage(path: string): Promise<Image> {
     const image = this.create({
-      file_name: name,
+      path,
     });
 
     try {
@@ -38,7 +38,7 @@ export class ImagesRepository extends Repository<Image> {
 
       return image;
     } catch (err) {
-      this.logger.log(`Internal error trying to create the image ${name}`);
+      this.logger.log(`Internal error trying to create the image ${path}`);
       throw new InternalServerErrorException();
     }
   }

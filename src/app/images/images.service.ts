@@ -10,7 +10,7 @@ export class ImagesService {
     return await this.imagesRepository.findImageById(id);
   }
 
-  async createImage(filename: string): Promise<Image> {
-    return await this.imagesRepository.createImage(filename);
+  async createImage(path: string): Promise<Image> {
+    return await this.imagesRepository.createImage(path);
   }
 }
