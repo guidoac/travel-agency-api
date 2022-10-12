@@ -29,10 +29,10 @@ import { join } from 'path';
       autoLoadEntities: true,
     }),
     MulterModule.register({
-      dest: `./${process.env.STATIC_DEFAULT_PATH}`,
+      dest: `./${process.env.STATIC_PATH_DEFAULT}`,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', process.env.STATIC_DEFAULT_PATH),
+      rootPath: join(__dirname, '..', process.env.STATIC_PATH_DEFAULT),
       serveRoot: '/upload/',
     }),
     UsersModule,
