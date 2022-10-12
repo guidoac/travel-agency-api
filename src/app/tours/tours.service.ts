@@ -35,13 +35,16 @@ export class ToursService {
 
   async createTourImage(tourId: string, file: ImageFileType, user: User) {
     const tourFound = await this.toursRepository.findTourById(tourId, user);
-    const image = await this.imagesService.createImage(file.filename);
-    if (tourFound) {
+    const image = await this.imagesService.createImage(file.path);
+
+    if (image) {
       await this.toursRepository.createTourImage(tourId, image, user);
 
       this.logger.log(
         `Image with file name ${file.filename} for Tour ${tourFound.id} created`,
       );
+
+      return image.path;
     }
   }
 }
