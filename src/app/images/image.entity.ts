@@ -6,7 +6,7 @@ import { Tour } from '../tours/tour.entity';
 @Entity('images')
 export class Image extends BaseEntity {
   @Column()
-  file_name: string;
+  path: string;
 
   @ManyToMany(() => Tour, (tour) => tour.images, {
     eager: false,
