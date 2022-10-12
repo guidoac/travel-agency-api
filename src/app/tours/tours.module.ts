@@ -11,7 +11,7 @@ import { ImagesRepository } from '../images/images.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Tour]), ImagesModule, CountriesModule],
-  providers: [ToursService, ToursRepository, ImagesService, ImagesRepository],
+  providers: [ToursService, ToursRepository],
   controllers: [ToursController],
 })
 export class ToursModule {}
