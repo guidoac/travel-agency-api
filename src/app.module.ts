@@ -33,6 +33,7 @@ import { join } from 'path';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', process.env.STATIC_DEFAULT_PATH),
+      serveRoot: '/upload/',
     }),
     UsersModule,
     AuthModule,
