@@ -41,7 +41,7 @@ export class ToursController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './upload/tours',
+        destination: `${process.env.STATIC_PATH_DEFAULT}/tours`,
       }),
     }),
   )

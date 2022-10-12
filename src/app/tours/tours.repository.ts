@@ -101,7 +101,7 @@ export class ToursRepository extends Repository<Tour> {
     try {
       await this.save(tourFound);
       this.logger.log(
-        `User with id ${user.id} created tour images: ${img.file_name} for tour ${tourId}`,
+        `User with id ${user.id} created tour images: ${img.path} for tour ${tourId}`,
       );
 
       return tourFound;
