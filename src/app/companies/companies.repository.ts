@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { AddressRepository } from '../address/address.repository';
-import { CreateAddressDto } from '../address/dto/create-address.dto';
+import { User } from '../users/user.entity';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
 
@@ -22,13 +22,14 @@ export class CompaniesRepository extends Repository<Company> {
 
   async createCompany(
     createCompanyDto: CreateCompanyDto,
-    createAddressDto: CreateAddressDto,
+    user: User,
   ): Promise<Company> {
-    const { name, description, telephone, email, logo } = createCompanyDto;
+    const { name, description, telephone, email, logo, company_address } =
+      createCompanyDto;
 
     try {
       const addressCreated = await this.addressRepository.createAddress(
-        createAddressDto,
+        company_address,
       );
 
       const company = this.create({
@@ -38,6 +39,7 @@ export class CompaniesRepository extends Repository<Company> {
         telephone,
         description,
         address: addressCreated,
+        user,
       });
 
       await this.save(company);

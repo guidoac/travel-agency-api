@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAddressDto } from '../address/dto/create-address.dto';
+import { User } from '../users/user.entity';
 import { CompaniesRepository } from './companies.repository';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -10,11 +10,8 @@ export class CompaniesService {
 
   async createCompany(
     createCompanyDto: CreateCompanyDto,
-    companyAddress: CreateAddressDto,
+    user: User,
   ): Promise<Company> {
-    return await this.companiesRepository.createCompany(
-      createCompanyDto,
-      companyAddress,
-    );
+    return await this.companiesRepository.createCompany(createCompanyDto, user);
   }
 }
