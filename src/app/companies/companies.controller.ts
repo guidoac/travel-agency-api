@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateAddressDto } from '../address/dto/create-address.dto';
-import { GetUser } from '../common/decorators/get-user.decorator';
-import { User } from '../users/user.entity';
+import { GetAuth } from '../common/decorators/get-auth.decorator';
+import { Auth } from '../common/types/req-auth';
 import { CompaniesService } from './companies.service';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -16,16 +15,19 @@ export class CompaniesController {
   @Post()
   createCompany(
     @Body() createCompanyDto: CreateCompanyDto,
-    @GetUser() user: User,
+    @GetAuth() auth: Auth,
   ): Promise<Company> {
-    return this.companiesService.createCompany(createCompanyDto, user);
+    return this.companiesService.createCompany(createCompanyDto, auth);
   }
 
   @Get()
-  getCompanies(
+  getCompaniesByFilter(
     @Query() getCompaniesFilterDto: GetCompaniesFilterDto,
-    @GetUser() user: User,
+    @GetAuth() auth: Auth,
   ) {
-    return this.companiesService.getCompanies(getCompaniesFilterDto, user);
+    return this.companiesService.getCompaniesByFilter(
+      getCompaniesFilterDto,
+      auth,
+    );
   }
 }

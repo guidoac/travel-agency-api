@@ -14,6 +14,9 @@ import { User } from '../users/user.entity';
 @Entity('companies')
 export class Company extends BaseEntity {
   @Column()
+  alias: string;
+
+  @Column()
   name: string;
 
   @Column()

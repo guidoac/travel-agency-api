@@ -2,11 +2,10 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { AddressRepository } from '../address/address.repository';
-import { User } from '../users/user.entity';
+import { Auth } from '../common/types/req-auth';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { GetCompaniesFilterDto } from './dto/get-companies-filter.dto';
@@ -24,7 +23,7 @@ export class CompaniesRepository extends Repository<Company> {
 
   async createCompany(
     createCompanyDto: CreateCompanyDto,
-    user: User,
+    auth: Auth,
   ): Promise<Company> {
     const { name, description, telephone, email, logo, company_address } =
       createCompanyDto;
@@ -41,7 +40,7 @@ export class CompaniesRepository extends Repository<Company> {
         telephone,
         description,
         address: addressCreated,
-        user,
+        user: auth.user,
       });
 
       await this.save(company);
@@ -54,12 +53,12 @@ export class CompaniesRepository extends Repository<Company> {
     }
   }
 
-  async getCompanies(getCompaniesFilterDto: GetCompaniesFilterDto, user: User) {
+  async getCompanies(getCompaniesFilterDto: GetCompaniesFilterDto, auth: Auth) {
     const { search } = getCompaniesFilterDto;
     try {
       const query = await this.createQueryBuilder('company');
 
-      query.where({ user });
+      query.where({ user: auth.user });
 
       if (search) {
         query.andWhere(
@@ -73,7 +72,7 @@ export class CompaniesRepository extends Repository<Company> {
       return companies;
     } catch (err) {
       this.logger.log(
-        `Failed to get companies for the user ${user}`,
+        `Failed to get companies for the user ${auth.user}`,
         err.stack,
       );
 

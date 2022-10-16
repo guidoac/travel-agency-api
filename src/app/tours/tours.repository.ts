@@ -1,9 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+import { Auth } from '../common/types/req-auth';
 import { CountriesService } from '../countries/countries.service';
-import { Country } from '../countries/country.entity';
 import { Image } from '../images/image.entity';
-import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { Tour } from './tour.entity';
@@ -21,12 +20,12 @@ export class ToursRepository extends Repository<Tour> {
 
   async findTours(
     getToursFilterDto: GetToursFilterDto,
-    user: User,
+    auth: Auth,
   ): Promise<Tour[]> {
     const { search } = getToursFilterDto;
     const query = this.createQueryBuilder('tour');
 
-    query.where({ user });
+    query.where({ user: auth.user });
 
     if (search) {
       query.andWhere(
@@ -37,7 +36,7 @@ export class ToursRepository extends Repository<Tour> {
     const result = await query.getMany();
 
     if (!result) {
-      const msg = `Não foi encontrado nenhum tour para o usuário ${user.username} com o filtro: ${search}`;
+      const msg = `Não foi encontrado nenhum tour para o usuário ${auth.user.username} com o filtro: ${search}`;
 
       this.logger.log(msg);
       throw new NotFoundException(msg);
@@ -45,15 +44,15 @@ export class ToursRepository extends Repository<Tour> {
     return result;
   }
 
-  async findTourById(id: string, user: User): Promise<Tour> {
+  async findTourById(id: string, auth: Auth): Promise<Tour> {
     const query = this.createQueryBuilder('tours');
 
-    query.andWhere({ user, id });
+    query.andWhere({ user: auth.user, id });
 
     const found = await query.getOne();
 
     if (!found) {
-      const msg = `Tour com id: ${id} do usuário: ${user.username} não encontrado`;
+      const msg = `Tour com id: ${id} do usuário: ${auth.user.username} não encontrado`;
 
       this.logger.log(msg);
       throw new NotFoundException(msg);
@@ -62,7 +61,7 @@ export class ToursRepository extends Repository<Tour> {
     return found;
   }
 
-  async createTour(createTourDto: CreateTourDto, user: User): Promise<Tour> {
+  async createTour(createTourDto: CreateTourDto, auth: Auth): Promise<Tour> {
     const { name, description, country } = createTourDto;
 
     const countryFound = await this.countriesService.findCountry(country);
@@ -78,11 +77,11 @@ export class ToursRepository extends Repository<Tour> {
       name,
       description,
       country: countryFound,
-      user,
+      user: auth.user,
     });
 
     try {
-      const msg = `User with id ${user.id} created tour: ${tour.name}`;
+      const msg = `User with id ${auth.user.id} created tour: ${tour.name}`;
 
       this.logger.log(msg);
       await this.save(tour);
@@ -93,15 +92,15 @@ export class ToursRepository extends Repository<Tour> {
     }
   }
 
-  async createTourImage(tourId: string, img: Image, user: User) {
-    const tourFound = await this.findTourById(tourId, user);
+  async createTourImage(tourId: string, img: Image, auth: Auth) {
+    const tourFound = await this.findTourById(tourId, auth);
 
     tourFound.images = [img];
 
     try {
       await this.save(tourFound);
       this.logger.log(
-        `User with id ${user.id} created tour images: ${img.path} for tour ${tourId}`,
+        `User with id ${auth.user.id} created tour images: ${img.path} for tour ${tourId}`,
       );
 
       return tourFound;

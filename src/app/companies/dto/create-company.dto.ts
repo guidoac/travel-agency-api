@@ -1,7 +1,11 @@
 import { IsEmail, IsNotEmpty, IsObject, IsString } from 'class-validator';
 import { CreateAddressDto } from 'src/app/address/dto/create-address.dto';
+import { Generated } from 'typeorm';
 
 export class CreateCompanyDto {
+  @IsString()
+  alias: string;
+
   @IsNotEmpty()
   @IsString()
   name: string;

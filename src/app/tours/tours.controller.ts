@@ -10,41 +10,39 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { GetUser } from 'src/app/common/decorators/get-user.decorator';
+import { GetAuth } from 'src/app/common/decorators/get-auth.decorator';
 import { ImageFileType } from 'src/app/common/types/files';
 import { MyFileInterceptor } from '../common/interceptors/file-upload.interceptor';
-import { User } from '../users/user.entity';
+import { Auth } from '../common/types/req-auth';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { ToursService } from './tours.service';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('tours')
+@Controller(':companyAlias/tours')
 export class ToursController {
   constructor(private toursService: ToursService) {}
 
   @Get()
   findTours(
     @Body() getToursFilterDto: GetToursFilterDto,
-    @GetUser() user: User,
+    @GetAuth() auth: Auth,
   ) {
-    return this.toursService.findTours(getToursFilterDto, user);
+    return this.toursService.findTours(getToursFilterDto, auth);
   }
 
   @Post()
-  createTour(@Body() createTourDto: CreateTourDto, @GetUser() user: User) {
-    return this.toursService.createTour(createTourDto, user);
+  createTour(@Body() createTourDto: CreateTourDto, @GetAuth() auth: Auth) {
+    return this.toursService.createTour(createTourDto, auth);
   }
 
   @Post('/:id/image')
   @UseInterceptors(MyFileInterceptor())
   createTourImage(
     @UploadedFile() file: ImageFileType,
-    @Param('id') id: string,
-    @GetUser() user: User,
+    @Param('id') tourId: string,
+    @GetAuth() auth: Auth,
   ) {
-    return this.toursService.createTourImage(id, file, user);
+    return this.toursService.createTourImage(tourId, file, auth);
   }
 }

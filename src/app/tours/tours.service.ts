@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ImageFileType } from 'src/app/common/types/files';
+import { Auth } from '../common/types/req-auth';
 import { CountriesService } from '../countries/countries.service';
 import { ImagesService } from '../images/images.service';
-import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { Tour } from './tour.entity';
@@ -13,32 +13,31 @@ export class ToursService {
   private logger = new Logger('ToursService');
 
   constructor(
-    private countriesService: CountriesService,
     private toursRepository: ToursRepository,
     private imagesService: ImagesService,
   ) {}
 
   async findTours(
     getToursFilterDto: GetToursFilterDto,
-    user: User,
+    auth: Auth,
   ): Promise<Tour[]> {
-    return await this.toursRepository.findTours(getToursFilterDto, user);
+    return await this.toursRepository.findTours(getToursFilterDto, auth);
   }
 
-  async findTourById(id: string, user: User): Promise<Tour> {
-    return await this.toursRepository.findTourById(id, user);
+  async findTourById(id: string, auth: Auth): Promise<Tour> {
+    return await this.toursRepository.findTourById(id, auth);
   }
 
-  async createTour(createTourDto: CreateTourDto, user: User): Promise<Tour> {
-    return await this.toursRepository.createTour(createTourDto, user);
+  async createTour(createTourDto: CreateTourDto, auth: Auth): Promise<Tour> {
+    return await this.toursRepository.createTour(createTourDto, auth);
   }
 
-  async createTourImage(tourId: string, file: ImageFileType, user: User) {
-    const tourFound = await this.toursRepository.findTourById(tourId, user);
+  async createTourImage(tourId: string, file: ImageFileType, auth: Auth) {
+    const tourFound = await this.toursRepository.findTourById(tourId, auth);
     const image = await this.imagesService.createImage(file.path);
 
     if (image) {
-      await this.toursRepository.createTourImage(tourId, image, user);
+      await this.toursRepository.createTourImage(tourId, image, auth);
 
       this.logger.log(
         `Image with file name ${file.filename} for Tour ${tourFound.id} created`,
