@@ -12,8 +12,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { GetUser } from 'src/utils/decorators/get-user.decorator';
-import { ImageFileType } from 'src/utils/types/files';
+import { GetUser } from 'src/app/common/decorators/get-user.decorator';
+import { ImageFileType } from 'src/app/common/types/files';
+import { MyFileInterceptor } from '../common/interceptors/file-upload.interceptor';
 import { User } from '../users/user.entity';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
@@ -38,13 +39,7 @@ export class ToursController {
   }
 
   @Post('/:id/image')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: `${process.env.STATIC_PATH_DEFAULT}/tours`,
-      }),
-    }),
-  )
+  @UseInterceptors(MyFileInterceptor())
   createTourImage(
     @UploadedFile() file: ImageFileType,
     @Param('id') id: string,
