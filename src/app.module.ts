@@ -11,6 +11,7 @@ import { CompaniesModule } from './app/companies/companies.module';
 import { AddressModule } from './app/address/address.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CommonModule } from './app/common/common.module';
 
 @Global()
 @Module({
@@ -29,11 +30,11 @@ import { join } from 'path';
       autoLoadEntities: true,
     }),
     MulterModule.register({
-      dest: `./${process.env.STATIC_PATH_DEFAULT}`,
+      dest: `./${process.env.STATIC_FILES_PATH}`,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', process.env.STATIC_PATH_DEFAULT),
-      serveRoot: '/upload/',
+      rootPath: join(__dirname, '..', process.env.STATIC_FILES_PATH),
+      serveRoot: '/uploads/',
     }),
     UsersModule,
     AuthModule,
@@ -42,6 +43,7 @@ import { join } from 'path';
     ImagesModule,
     CompaniesModule,
     AddressModule,
+    CommonModule,
   ],
   exports: [MulterModule],
 })
