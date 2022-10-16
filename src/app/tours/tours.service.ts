@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ImageFileType } from 'src/utils/types/files';
+import { ImageFileType } from 'src/app/common/types/files';
 import { CountriesService } from '../countries/countries.service';
 import { ImagesService } from '../images/images.service';
 import { User } from '../users/user.entity';
