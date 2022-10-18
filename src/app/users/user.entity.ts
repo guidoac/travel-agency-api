@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/app/common/database/base-entity.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { Tour } from '../tours/tour.entity';
+import { Company } from '../companies/company.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -15,8 +15,8 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany((type) => Tour, (tour) => tour.user, {
+  @OneToMany((_type) => Company, (company) => company.user, {
     eager: true,
   })
-  tours: Tour[];
+  companies: Company[];
 }

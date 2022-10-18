@@ -9,6 +9,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Address } from '../address/address.entity';
+import { Tour } from '../tours/tour.entity';
 import { User } from '../users/user.entity';
 
 @Entity('companies')
@@ -43,4 +44,9 @@ export class Company extends BaseEntity {
   @JoinColumn()
   @Exclude()
   user: User;
+
+  @OneToMany((_type) => Tour, (tour) => tour.company, {
+    eager: true,
+  })
+  tours: Tour[];
 }

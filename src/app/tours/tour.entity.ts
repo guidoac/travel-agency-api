@@ -9,6 +9,7 @@ import {
   ManyToMany,
   ManyToOne,
 } from 'typeorm';
+import { Company } from '../companies/company.entity';
 import { Country } from '../countries/country.entity';
 import { Image } from '../images/image.entity';
 import { User } from '../users/user.entity';
@@ -31,7 +32,7 @@ export class Tour extends BaseEntity {
   @ManyToOne((_type) => User, (user) => user.id, {})
   @JoinColumn()
   @Exclude()
-  user: User;
+  company: Company;
 
   @ManyToMany(() => Image, (img) => img.tours, {
     eager: true,
