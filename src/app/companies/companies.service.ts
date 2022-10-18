@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Auth } from '../common/types/req-auth';
+import { User } from '../users/user.entity';
 import { CompaniesRepository } from './companies.repository';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -24,5 +25,9 @@ export class CompaniesService {
       getCompaniesFilterDto,
       auth,
     );
+  }
+
+  async getCompanyByAlias(alias: string, user: User): Promise<Company> {
+    return await this.companiesRepository.getCompanyByAlias(alias, user);
   }
 }

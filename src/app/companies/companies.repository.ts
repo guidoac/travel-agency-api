@@ -2,10 +2,12 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { AddressRepository } from '../address/address.repository';
 import { Auth } from '../common/types/req-auth';
+import { User } from '../users/user.entity';
 import { Company } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { GetCompaniesFilterDto } from './dto/get-companies-filter.dto';
@@ -78,5 +80,19 @@ export class CompaniesRepository extends Repository<Company> {
 
       throw err;
     }
+  }
+
+  async getCompanyByAlias(alias: string, user: User): Promise<Company> {
+    const query = await this.createQueryBuilder('company');
+
+    query.where({ alias, user });
+
+    const company = await query.getOne();
+
+    if (!company) {
+      throw new NotFoundException(`Company with alias ${alias} not found`);
+    }
+
+    return company;
   }
 }
