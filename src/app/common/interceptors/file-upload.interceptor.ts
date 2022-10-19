@@ -3,7 +3,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { extname } from 'path';
 
-export function MyFileInterceptor(path = '') {
+export function TheFileInterceptor(path = '') {
   path = `${path}`;
 
   return FileInterceptor('file', {
