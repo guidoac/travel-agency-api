@@ -12,13 +12,15 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { GetAuth } from 'src/app/common/decorators/get-auth.decorator';
 import { ImageFileType } from 'src/app/common/types/files';
-import { MyFileInterceptor } from '../common/interceptors/file-upload.interceptor';
+import { TheAuthGuard } from '../common/guards/auth.guard';
+import { TheCompanyGuard } from '../common/guards/company.guard';
+import { TheFileInterceptor } from '../common/interceptors/file-upload.interceptor';
 import { Auth } from '../common/types/req-auth';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours-filter.dto';
 import { ToursService } from './tours.service';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(TheAuthGuard, TheCompanyGuard)
 @Controller(':companyAlias/tours')
 export class ToursController {
   constructor(private toursService: ToursService) {}
@@ -37,7 +39,7 @@ export class ToursController {
   }
 
   @Post('/:id/image')
-  @UseInterceptors(MyFileInterceptor())
+  @UseInterceptors(TheFileInterceptor())
   createTourImage(
     @UploadedFile() file: ImageFileType,
     @Param('id') tourId: string,

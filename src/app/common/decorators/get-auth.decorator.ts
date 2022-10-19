@@ -8,7 +8,7 @@ export const GetAuth = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
 
-    const company = request.params.companyAlias;
+    const company = request.company;
     const user = request.user;
 
     if (!user) {

@@ -19,5 +19,6 @@ import { Company } from './company.entity';
     CountriesRepository,
   ],
   controllers: [CompaniesController],
+  exports: [CompaniesService],
 })
 export class CompaniesModule {}
