@@ -8,9 +8,15 @@ import { CountriesModule } from '../countries/countries.module';
 import { ImagesModule } from '../images/images.module';
 import { ImagesService } from '../images/images.service';
 import { ImagesRepository } from '../images/images.repository';
+import { CompaniesModule } from '../companies/companies.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tour]), ImagesModule, CountriesModule],
+  imports: [
+    TypeOrmModule.forFeature([Tour]),
+    ImagesModule,
+    CountriesModule,
+    CompaniesModule,
+  ],
   providers: [ToursService, ToursRepository],
   controllers: [ToursController],
 })
