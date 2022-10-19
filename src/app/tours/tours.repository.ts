@@ -25,7 +25,7 @@ export class ToursRepository extends Repository<Tour> {
     const { search } = getToursFilterDto;
     const query = this.createQueryBuilder('tour');
 
-    query.where({ user: auth.user });
+    query.where({ company: auth.company });
 
     if (search) {
       query.andWhere(
@@ -77,7 +77,7 @@ export class ToursRepository extends Repository<Tour> {
       name,
       description,
       country: countryFound,
-      user: auth.user,
+      company: auth.company,
     });
 
     try {
