@@ -29,7 +29,7 @@ export class Tour extends BaseEntity {
   @JoinColumn()
   country: Country;
 
-  @ManyToOne((_type) => User, (user) => user.id, {})
+  @ManyToOne((_type) => Company, (company) => company.id, {})
   @JoinColumn()
   @Exclude()
   company: Company;
