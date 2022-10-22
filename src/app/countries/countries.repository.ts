@@ -17,4 +17,12 @@ export class CountriesRepository extends Repository<Country> {
       return null;
     }
   }
+
+  async findAll(): Promise<Country[]> {
+    const query = this.createQueryBuilder('country');
+
+    const countries = await query.getMany();
+
+    return await countries;
+  }
 }

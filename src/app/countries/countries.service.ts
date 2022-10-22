@@ -6,6 +6,10 @@ import { Country } from './country.entity';
 export class CountriesService {
   constructor(private countriesRepository: CountriesRepository) {}
 
+  async findAll(): Promise<Country[]> {
+    return await this.countriesRepository.findAll();
+  }
+
   async findCountry(countryCode: string): Promise<Country> {
     return await this.countriesRepository.findCountry(countryCode);
   }
