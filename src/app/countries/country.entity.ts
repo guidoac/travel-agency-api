@@ -24,10 +24,6 @@ export class Country {
   @Column({ nullable: true })
   code: string;
 
-  @OneToOne((_type) => Image, (image) => image.country, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  banner: Image;
+  @Column()
+  banner: string;
 }

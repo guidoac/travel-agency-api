@@ -41,14 +41,12 @@ export class CountriesRepository extends Repository<Country> {
   async createCountry(createCountryDto: CreateCountryDto): Promise<Country> {
     const { name, description, code, banner } = createCountryDto;
 
-    const image = await this.imagesRepository.createImage(banner);
-
     try {
       const country = this.create({
         name,
         description,
         code,
-        banner: image,
+        banner,
       });
 
       await this.save(country);
