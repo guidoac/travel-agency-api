@@ -27,8 +27,15 @@ export class CompaniesRepository extends Repository<Company> {
     createCompanyDto: CreateCompanyDto,
     auth: Auth,
   ): Promise<Company> {
-    const { name, description, telephone, email, logo, company_address } =
-      createCompanyDto;
+    const {
+      alias,
+      name,
+      description,
+      telephone,
+      email,
+      logo,
+      company_address,
+    } = createCompanyDto;
 
     try {
       const addressCreated = await this.addressRepository.createAddress(
@@ -36,6 +43,7 @@ export class CompaniesRepository extends Repository<Company> {
       );
 
       const company = this.create({
+        alias,
         name,
         email,
         logo,
