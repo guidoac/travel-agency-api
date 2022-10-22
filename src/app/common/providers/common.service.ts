@@ -4,6 +4,6 @@ import { ImageFileType } from '../types/files';
 @Injectable()
 export class CommonService {
   uploadFile(file: ImageFileType): string {
-    return file.filename;
+    return `${process.env.APP_URL}/${file.path}`;
   }
 }
