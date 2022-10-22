@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Address } from '../address/address.entity';
+import { Image } from '../images/image.entity';
 import { Tour } from '../tours/tour.entity';
 
 @Entity('countries')
@@ -16,8 +24,10 @@ export class Country {
   @Column({ nullable: true })
   code: string;
 
-  @OneToMany((_type) => Tour, (tour) => tour.country, {
-    eager: false,
+  @OneToOne((_type) => Image, (image) => image.country, {
+    eager: true,
+    cascade: true,
   })
-  tours: Tour[];
+  @JoinColumn()
+  banner: Image;
 }
