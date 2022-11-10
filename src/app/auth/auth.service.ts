@@ -25,22 +25,22 @@ export class AuthService {
   }
 
   async signIn(authCredentialsDto: AuthCredentialsDto) {
-    const { username, password } = authCredentialsDto;
-    const user = await this.validateUser(username, password);
+    const { email, password } = authCredentialsDto;
+    const user = await this.validateUser(email, password);
 
     if (!user) {
-      this.logger.log(`User with username ${username} is invalid`);
+      this.logger.log(`User with email ${email} is invalid`);
       throw new UnauthorizedException();
     }
 
-    const payload = { username, sub: user.id };
+    const payload = { email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async validateUser(username: string, pass: string) {
-    const user = await this.usersService.findUser(username);
+  async validateUser(email: string, pass: string) {
+    const user = await this.usersService.findUser(email);
 
     if (user && bcrypt.compare(pass, user.password)) {
       const { password, ...result } = user;

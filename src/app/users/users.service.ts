@@ -12,7 +12,7 @@ export class UsersService {
     return await this.usersRepostory.createUser(createUserDto);
   }
 
-  async findUser(username: string): Promise<User> {
-    return await this.usersRepostory.findUser(username);
+  async findUser(email: string): Promise<User> {
+    return await this.usersRepostory.findUser(email);
   }
 }

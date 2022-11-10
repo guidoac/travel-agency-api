@@ -19,8 +19,8 @@ export class UsersRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  async findUser(username): Promise<User> {
-    const found = await this.findOneBy({ username });
+  async findUser(email): Promise<User> {
+    const found = await this.findOneBy({ email });
 
     if (!found) {
       return null;
