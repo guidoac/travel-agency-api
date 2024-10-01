@@ -1,17 +1,17 @@
 import { Global, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UsersModule } from './app/users/users.module';
-import { AuthModule } from './app/auth/auth.module';
-import { ToursModule } from './app/tours/tours.module';
-import { CountriesModule } from './app/countries/countries.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { ToursModule } from './modules/tours/tours.module';
+import { CountriesModule } from './modules/countries/countries.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { ImagesModule } from './app/images/images.module';
-import { CompaniesModule } from './app/companies/companies.module';
-import { AddressModule } from './app/address/address.module';
+import { ImagesModule } from './modules/images/images.module';
+import { CompaniesModule } from './modules/companies/companies.module';
+import { AddressModule } from './modules/address/address.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { CommonModule } from './app/common/common.module';
+import { CommonModule } from './modules/common/common.module';
 
 @Global()
 @Module({
